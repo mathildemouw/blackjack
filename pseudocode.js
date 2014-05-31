@@ -18,8 +18,3 @@
 //as a user, I want to know whether the compuet or I wins or busts
 	//each turn, the total value of the cards is calculated and shown
 	//if either player is over 21, the other player wins
-
-//refector ideas:
-//DRY up some of the trees -- if the user needs more feedback, abstract into a GameView, or total MVC structure.
-//what if it's a push? what if both players stay?
-//see only compueter's face up card
