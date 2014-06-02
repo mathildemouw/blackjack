@@ -16,35 +16,38 @@ function Game ( opts ) {
 }
 Game.prototype = {
 	deal: function () {
+		var choice = document.getElementById( "choice" );
+		choice.style.display = 'block'
 		this.createDeck();
 		this.hitPlayer( this.user );
 		this.hitPlayer( this.computer );
 		this.hitPlayer( this.user );
 		this.hitPlayer( this.computer );
-		this.takeTurn();
+		this.checkScore();
+		this.showScores();
+		document.getElementById('play').style.display = 'none'
+
 	},
-	takeTurn: function() {
-			this.checkScore();
-		if (this.winner){
-			return alert( "See you next time!" );
-		}else if (this.winner === false){
-			this.ask();
-			this.takeTurn();
-		};
-	},
-	ask: function () {
-		var response = prompt( "Would you like to stay or hit?" );
-		if ( response[ 0 ].toLowerCase() === "h" ){
-			this.hitPlayer( this.user );
+	ask: function ( event ) {
+		event.preventDefault();
+		this.checkScore	();
+		this.showResult( "Would you like to stay or hit?" );
+		var response = event.currentTarget.elements.userInput.value
+		if ( response.toLowerCase() === "h" ){
 			this.user.last_response = "h"
+			this.checkScore();
+			this.hitPlayer( this.user );
 		}else{
 			this.user.last_response = "s"
+			this.checkScore();
 		};
 		if ( this.computer.score < 17 ){
-			this.hitPlayer( this.computer );
 			this.computer.last_response = "h"
+			this.checkScore();
+			this.hitPlayer( this.computer );
 		}else{
 			this.computer.last_response = "s"
+			this.checkScore();
 		}; 
 	},
 	hitPlayer: function ( player ) {
@@ -114,10 +117,16 @@ Game.prototype = {
 		document.getElementById( 'result' ).innerHTML = result;
 	},
 	showScores: function () {
-		document.getElementById( 'current-score' ).innerHTML = ("Your hand:<br>" + this.user.hand 
+		if ( this.winner ){
+		document.getElementById( 'current-score' ).innerHTML = ( "Your hand:<br>" + this.user.hand 
 			+ "<br>Your score:<br>" + this.user.score 
-			+ "<br>Computer's latest card:<br>" + this.computer.hand[this.computer.hand.length-1] 
+			+ "<br>Computer's latest card:<br>" + this.computer.hand
 			+ "<br>Computer's score:<br>" + this.computer.score );
+		}else{
+			document.getElementById( 'current-score' ).innerHTML = ( "Your hand:<br>" + this.user.hand 
+				+ "<br>Your score:<br>" + this.user.score 
+				+ "<br>Computer's latest card:<br>" + this.computer.hand[ this.computer.hand.length-1 ] );
+		}
 	},
 }
 function Player () {
@@ -125,8 +134,17 @@ function Player () {
 	this.score = 0;
 	this.last_response = "";
 }
+function userResponseListener ( game ) {
+	var choice = document.getElementById( "choice" );
+	choice.addEventListener('submit', game.ask.bind( game ) );
+}
+function startGameListener ( game ) {
+	var play = document.getElementById( "play" );
+	play.addEventListener( 'click', game.deal.bind( game ) );
+}
 //////////game///////////
 theMachine = new Player;
 you = new Player;
 blackJack = new Game({computer: theMachine, user: you});
-blackJack.deal();
+startGameListener( blackJack );
+userResponseListener( blackJack );

@@ -8,6 +8,7 @@
 		.container{
 			margin: auto;
 			width: 95%;
+			height:500px;
 			font-family: sans-serif;
 			background-color: #A4D09F;
 			text-align: center;
@@ -21,6 +22,11 @@
 	<div class="container">
 		<h1>Blackjack</h1>
 		<h6 id="result">Play Blackjack!</h6>
+		<button id="play">Play!</button>
+		<form style="display:none" id="choice">
+			H/S?<input type="text" name="userInput">
+			<input type="submit">
+		</form>
 		<h6 id="current-score"></h6>
 	</div>
 	<script type="text/javascript" src= "main.js"></script>
