@@ -26,10 +26,10 @@ Game.prototype = {
 	takeTurn: function() {
 			this.checkScore();
 		if (this.winner){
-			return console.log( "See you next time!" )
+			return alert( "See you next time!" );
 		}else if (this.winner === false){
 			this.ask();
-			this.takeTurn()
+			this.takeTurn();
 		};
 	},
 	ask: function () {
@@ -57,14 +57,16 @@ Game.prototype = {
 		this.computer.score = this.calcScore( this.computer );
 		if ( ( this.computer.score === 21 ) || ( this.user.score > 21 ) ){
 			this.winner = this.computer;
-			alert( "You lose." + this.showScores());
+			this.showResult( "YOU LOSE.") 
+			this.showScores();
 		}else if ( ( this.user.score === 21 ) || ( this.computer.score > 21 ) ){
 			this.winner = this.user;
-			alert( "You win!" + this.showScores()) ;
+			this.showResult( "YOU WIN!")
+			 this.showScores() ;
 		}else if( (( this.user.last_response === "s" ) && ( this.computer.last_response === "s" )) ){
 			this.evaluateStay( this.user, this.computer );
 		}else{
-			alert(this.showScores());
+			this.showScores();
 		}
 	},
 	calcScore: function ( player ) {
@@ -96,24 +98,26 @@ Game.prototype = {
 	evaluateStay: function ( user, computer ) {
 		if ( user.score === computer.score ){
 			this.winner = "push";
-			alert( "Push! No one wins.\n\n" + this.showScores());
+			this.showResult( "Push! No one wins.");
+			this.showScores();
 		}else if( user.score > computer.score ){
 			this.winner = this.user;
-			alert( "YOU WIN!!!\n\n" + this.showScores());
+			this.showResult( "YOU WIN!!!" );
+			 this.showScores();
 		}else{
 			this.winner = this.computer;
-			alert( "YOU LOSE.\n\n" + this.showScores());
+			this.showResult( "YOU LOSE.")
+			 this.showScores();
 		}
 	},
+	showResult: function ( result ) {
+		document.getElementById( 'result' ).innerHTML = result;
+	},
 	showScores: function () {
-		console.log("Your hand:\n" + this.user.hand 
-			+ "\nComputer's latest card:\n" + this.computer.hand[this.computer.hand.length-1] 
-			+ "\nYour score:\n" + this.user.score 
-			+ "\nComputer's score:\n" + this.computer.score );
-		return ("Your hand:\n" + this.user.hand 
-			+ "\nComputer's latest card:\n" + this.computer.hand[this.computer.hand.length-1] 
-			+ "\nYour score:\n" + this.user.score 
-			+ "\nComputer's score:\n" + this.computer.score );
+		document.getElementById( 'current-score' ).innerHTML = ("Your hand:<br>" + this.user.hand 
+			+ "<br>Your score:<br>" + this.user.score 
+			+ "<br>Computer's latest card:<br>" + this.computer.hand[this.computer.hand.length-1] 
+			+ "<br>Computer's score:<br>" + this.computer.score );
 	},
 }
 function Player () {
